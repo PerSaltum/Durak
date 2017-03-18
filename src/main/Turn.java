@@ -9,9 +9,9 @@ public class Turn {
 	private final int opponentCardsNumber;
 	private final int remainingDeckCardsNumber;
 	private final Card deckBottomCard;
-	private final Suit trumpSuit;
-	
-	public Turn(TurnType turnType, Card[] deadCards, Card attacker, CardFight[] fights, Card[] yourCards, int opponentCardsNumber, int remainingDeckCardsNumber, Card deckBottomCard, Suit trumpSuit) {
+
+	public Turn(TurnType turnType, Card[] deadCards, Card attacker, CardFight[] fights, Card[] yourCards,
+			int opponentCardsNumber, int remainingDeckCardsNumber, Card deckBottomCard, Suit trumpSuit) {
 		this.turnType = turnType;
 		this.deadCards = deadCards;
 		this.attacker = attacker;
@@ -20,7 +20,6 @@ public class Turn {
 		this.opponentCardsNumber = opponentCardsNumber;
 		this.remainingDeckCardsNumber = remainingDeckCardsNumber;
 		this.deckBottomCard = deckBottomCard;
-		this.trumpSuit = trumpSuit;
 	}
 
 	public TurnType getTurnType() {
@@ -56,6 +55,6 @@ public class Turn {
 	}
 
 	public Suit getTrumpSuit() {
-		return trumpSuit;
+		return deckBottomCard.getSuit();
 	}
 }

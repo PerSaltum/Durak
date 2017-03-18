@@ -1,5 +1,5 @@
 package main;
 
 public interface Strategy {
-	public void move(Turn turn, Move move);
+	public Move move(Turn turn);
 }

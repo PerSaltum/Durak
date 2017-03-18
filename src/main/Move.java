@@ -1,22 +1,21 @@
 package main;
 
 public class Move {
-	private MoveType moveType = null;
-	private Card[] cards;
-	
-	public Move(int maximumCardsNumber) {
-		this.cards = new Card[maximumCardsNumber];
+	private final MoveType moveType;
+	private final Card card;
+
+	public Move(MoveType moveType, Card card) {
+		super();
+		this.moveType = moveType;
+		this.card = card;
 	}
-	
-	public Card[] getCards() {
-		return cards;
-	}
-	
+
 	public MoveType getMoveType() {
 		return moveType;
 	}
-	
-	public void setMoveType(MoveType moveType) {
-		this.moveType = moveType;
+
+	public Card getCard() {
+		return card;
 	}
+
 }
