@@ -2,6 +2,12 @@ package main;
 
 import java.util.Set;
 
+import main.common.Card;
+import main.common.Move;
+import main.common.MoveType;
+import main.common.Suit;
+import main.common.Turn;
+
 public class GreedyStrategy implements Strategy {
 
 	@Override
@@ -34,7 +40,7 @@ public class GreedyStrategy implements Strategy {
 		if (best.getMoveType().equals(MoveType.Finish))
 			return true;
 
-		Suit trumpSuit = turn.getTrumpSuit();
+		Suit trumpSuit = turn.getCommonInfo().getTrumpSuit();
 		Card bestCard = best.getCard();
 		Card moveCard = move.getCard();
 

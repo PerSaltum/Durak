@@ -1,4 +1,4 @@
-package main;
+package main.common;
 
 public class Move {
 	private final MoveType moveType;

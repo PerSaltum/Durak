@@ -1,4 +1,4 @@
-package main;
+package main.common;
 
 public class Card {
 	private final Suit suit;

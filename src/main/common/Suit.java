@@ -1,4 +1,4 @@
-package main;
+package main.common;
 
 public enum Suit {
 	Hearts { @Override public String toString() { return "♥"; } },

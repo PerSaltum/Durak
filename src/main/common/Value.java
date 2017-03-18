@@ -1,4 +1,4 @@
-package main;
+package main.common;
 
 public enum Value {
 	Six { @Override public String toString() { return "6"; } },

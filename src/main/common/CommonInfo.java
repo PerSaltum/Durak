@@ -1,23 +1,21 @@
-package main;
+package main.common;
 
-public class Turn {
+public class CommonInfo {
+
 	private final TurnType turnType;
 	private final Card[] deadCards;
 	private final Card attacker; // Not null when turnType == Defence
 	private final CardFight[] fights;
-	private final Card[] yourCards;
-	private final int opponentCardsNumber;
 	private final int remainingDeckCardsNumber;
 	private final Card deckBottomCard;
 
-	public Turn(TurnType turnType, Card[] deadCards, Card attacker, CardFight[] fights, Card[] yourCards,
-			int opponentCardsNumber, int remainingDeckCardsNumber, Card deckBottomCard, Suit trumpSuit) {
+	public CommonInfo(TurnType turnType, Card[] deadCards, Card attacker, CardFight[] fights,
+			int remainingDeckCardsNumber, Card deckBottomCard) {
+		super();
 		this.turnType = turnType;
 		this.deadCards = deadCards;
 		this.attacker = attacker;
 		this.fights = fights;
-		this.yourCards = yourCards;
-		this.opponentCardsNumber = opponentCardsNumber;
 		this.remainingDeckCardsNumber = remainingDeckCardsNumber;
 		this.deckBottomCard = deckBottomCard;
 	}
@@ -38,14 +36,6 @@ public class Turn {
 		return fights;
 	}
 
-	public Card[] getYourCards() {
-		return yourCards;
-	}
-
-	public int getOpponentCardsNumber() {
-		return opponentCardsNumber;
-	}
-
 	public int getRemainingDeckCardsNumber() {
 		return remainingDeckCardsNumber;
 	}
@@ -57,4 +47,5 @@ public class Turn {
 	public Suit getTrumpSuit() {
 		return deckBottomCard.getSuit();
 	}
+
 }

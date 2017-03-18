@@ -3,6 +3,14 @@ package main;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import main.common.Card;
+import main.common.CardFight;
+import main.common.Move;
+import main.common.MoveType;
+import main.common.Suit;
+import main.common.Turn;
+import main.common.TurnType;
+
 public class Utils {
 
 	private static final Move finish = new Move(MoveType.Finish, null);
@@ -10,14 +18,15 @@ public class Utils {
 	public static Set<Move> getPossibleMoves(Turn turn) {
 		Set<Move> result = new LinkedHashSet<>();
 
-		if (turn.getTurnType().equals(TurnType.Attack) || turn.getTurnType().equals(TurnType.AfterAttack)) {
-			if (turn.getFights() == null || turn.getFights().length == 0) {
+		if (turn.getCommonInfo().getTurnType().equals(TurnType.Attack)
+				|| turn.getCommonInfo().getTurnType().equals(TurnType.AfterAttack)) {
+			if (turn.getCommonInfo().getFights() == null || turn.getCommonInfo().getFights().length == 0) {
 				for (Card card : turn.getYourCards()) {
 					result.add(new Move(MoveType.SendCards, card));
 				}
 			} else {
 				loop: for (Card card : turn.getYourCards()) {
-					for (CardFight cardFight : turn.getFights()) {
+					for (CardFight cardFight : turn.getCommonInfo().getFights()) {
 						if (card.getValue().equals(cardFight.getAttacker().getValue())
 								|| card.getValue().equals(cardFight.getDefender().getValue())) {
 							result.add(new Move(MoveType.SendCards, card));
@@ -28,8 +37,8 @@ public class Utils {
 				}
 			}
 		} else {
-			Card attacker = turn.getAttacker();
-			Suit trumpSuit = turn.getTrumpSuit();
+			Card attacker = turn.getCommonInfo().getAttacker();
+			Suit trumpSuit = turn.getCommonInfo().getTrumpSuit();
 			for (Card card : turn.getYourCards()) {
 				if (!card.getSuit().equals(attacker.getSuit()) && !card.getSuit().equals(trumpSuit))
 					continue;
