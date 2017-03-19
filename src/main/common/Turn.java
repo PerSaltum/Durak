@@ -1,11 +1,13 @@
 package main.common;
 
+import java.util.Set;
+
 public class Turn {
 	private final CommonInfo commonInfo;
-	private final Card[] yourCards;
+	private final Set<Card> yourCards;
 	private final int opponentCardsNumber;
 
-	public Turn(CommonInfo commonInfo, Card[] yourCards, int opponentCardsNumber) {
+	public Turn(CommonInfo commonInfo, Set<Card> yourCards, int opponentCardsNumber) {
 		super();
 		this.commonInfo = commonInfo;
 		this.yourCards = yourCards;
@@ -16,7 +18,7 @@ public class Turn {
 		return commonInfo;
 	}
 
-	public Card[] getYourCards() {
+	public Set<Card> getYourCards() {
 		return yourCards;
 	}
 
