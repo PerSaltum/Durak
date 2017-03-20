@@ -18,15 +18,7 @@ import main.strategy.RandomStrategy;
 import main.strategy.Strategy;
 
 public class Game {
-	private static final Card[] allCards;
-	static {
-		allCards = new Card[Value.values().length * Suit.values().length];
-		int i = 0;
-		for (Value value : Value.values())
-			for (Suit suit : Suit.values())
-				allCards[i++] = new Card(suit, value);
-	}
-
+	
 	public static void main(String[] args) {
 		Strategy firstPlayer = new RandomStrategy();
 		Strategy secondPlayer = new ConsoleStrategy();
@@ -36,6 +28,15 @@ public class Game {
 		while (isGameOver(state, commonInfo))
 			commonInfo = makeMove(state, commonInfo);
 		printResult(state, commonInfo);
+	}
+	
+	private static final Card[] allCards;
+	static {
+		allCards = new Card[Value.values().length * Suit.values().length];
+		int i = 0;
+		for (Value value : Value.values())
+			for (Suit suit : Suit.values())
+				allCards[i++] = new Card(suit, value);
 	}
 
 	public static Card[] getAllCards() {
