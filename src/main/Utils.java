@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -61,6 +63,36 @@ public class Utils {
 
 		return false;
 
+	}
+
+	public static Move[] sortMoves(Set<Move> possibleMoves) {
+		Move[] possibleMovesArray = new Move[possibleMoves.size()];
+		int i = 0;
+		for (Move move : possibleMoves)
+			possibleMovesArray[i++] = move;
+		Arrays.sort(possibleMovesArray, new Comparator<Move>() {
+			@Override
+			public int compare(Move o1, Move o2) {
+				return o1.hashCode() - o2.hashCode();
+			}
+		});
+
+		return possibleMovesArray;
+	}
+
+	public static Card[] sortCards(Set<Card> cards) {
+		Card[] cardsArray = new Card[cards.size()];
+		int i = 0;
+		for (Card card : cards)
+			cardsArray[i++] = card;
+		Arrays.sort(cardsArray, new Comparator<Card>() {
+			@Override
+			public int compare(Card o1, Card o2) {
+				return o1.hashCode() - o2.hashCode();
+			}
+		});
+
+		return cardsArray;
 	}
 
 }

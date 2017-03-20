@@ -209,8 +209,7 @@ public class Game {
 	}
 
 	private static void printResult(HiddenInfo state, CommonInfo commonInfo) {
-		// TODO Auto-generated method stub
-
+		// TODO
 	}
 
 }
