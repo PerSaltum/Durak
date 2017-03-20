@@ -94,11 +94,11 @@ public class Game {
 		Set<Card> secondToGive = state.getDefenderCards();
 
 		while (state.getDeckSize() > 0 && firstToGive.size() < 6) {
-			firstToGive.add(state.getNextCard());
+			firstToGive.add(state.pullCardFromDeck());
 		}
 
 		while (state.getDeckSize() > 0 && secondToGive.size() < 6) {
-			secondToGive.add(state.getNextCard());
+			secondToGive.add(state.pullCardFromDeck());
 		}
 		// prepare next move
 		state.switchRoles();
@@ -148,7 +148,7 @@ public class Game {
 		// Give cards to attacker
 		Set<Card> attackerCards = state.getAttackerCards();
 		while (attackerCards.size() < 6 && state.getDeckSize() > 0) {
-			attackerCards.add(state.getNextCard());
+			attackerCards.add(state.pullCardFromDeck());
 		}
 		// next attack
 		return new CommonInfo(TurnType.Attack, commonInfo.getDeadCards(), null, null, state.getDeckSize(),

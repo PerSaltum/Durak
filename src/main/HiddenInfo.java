@@ -29,8 +29,8 @@ public class HiddenInfo {
 		}
 
 		for (int i = 0; i < 6; i++) {
-			firstHand.add(this.getNextCard());
-			secondHand.add(this.getNextCard());
+			firstHand.add(this.pullCardFromDeck());
+			secondHand.add(this.pullCardFromDeck());
 		}
 
 	}
@@ -53,7 +53,7 @@ public class HiddenInfo {
 			return firstHand;
 	}
 
-	public Card getNextCard() {
+	public Card pullCardFromDeck() {
 		return deck.remove(deck.size() - 1);
 	}
 
