@@ -29,7 +29,7 @@ public class Game {
 			for (Suit suit : Suit.values())
 				allCards[i++] = new Card(suit, value);
 	}
-
+	
 	public static void main(String[] args) {
 		HiddenInfo state = new HiddenInfo();
 		CommonInfo commonInfo = init(state);
@@ -37,7 +37,11 @@ public class Game {
 			commonInfo = makeMove(state, commonInfo);
 		printResult(state, commonInfo);
 	}
-
+	
+	public static Card[] getAllCards() {
+		return allCards;
+	}
+	
 	private static CommonInfo init(HiddenInfo state) {
 		initDeck(state.deck);
 		Card deckBottomCard = state.deck.get(0);
