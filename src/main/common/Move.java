@@ -4,10 +4,20 @@ public class Move {
 	private final MoveType moveType;
 	private final Card card; // maybe null
 
-	public Move(MoveType moveType, Card card) {
+	private Move(MoveType moveType, Card card) {
 		super();
 		this.moveType = moveType;
 		this.card = card;
+	}
+	
+	private static final Move finishMove = new Move(MoveType.Finish, null);
+	
+	public static Move createFinishMove() {
+		return finishMove;
+	}
+	
+	public static Move createUseCardMove(Card card) {
+		return new Move(MoveType.UseCard, card);
 	}
 
 	public MoveType getMoveType() {
