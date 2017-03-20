@@ -13,6 +13,9 @@ import main.common.MoveType;
 import main.common.Suit;
 import main.common.TurnType;
 import main.common.Value;
+import main.strategy.ConsoleStrategy;
+import main.strategy.RandomStrategy;
+import main.strategy.Strategy;
 
 public class Game {
 	private static final Card[] allCards;
@@ -25,7 +28,10 @@ public class Game {
 	}
 
 	public static void main(String[] args) {
-		HiddenInfo state = new HiddenInfo();
+		Strategy firstPlayer = new RandomStrategy();
+		Strategy secondPlayer = new ConsoleStrategy();
+		
+		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
 		CommonInfo commonInfo = state.initCommonInfo();
 		while (isGameOver(state, commonInfo))
 			commonInfo = makeMove(state, commonInfo);

@@ -13,6 +13,7 @@ import main.common.CommonInfo;
 import main.common.Move;
 import main.common.Turn;
 import main.common.TurnType;
+import main.strategy.Strategy;
 
 public class HiddenInfo {
 	private final List<Card> deck = new LinkedList<>();// not in order
@@ -21,7 +22,13 @@ public class HiddenInfo {
 	private boolean isFirstPlayerAttack = true;
 	static final Random random = new Random();
 
-	public HiddenInfo() {
+	private final Strategy firstPlayer;
+	private final Strategy secondPlayer;
+	
+	public HiddenInfo(Strategy firstPlayer, Strategy secondPlayer) {
+		this.firstPlayer = firstPlayer;
+		this.secondPlayer = secondPlayer;
+		
 		List<Card> tmp = new LinkedList<>(Arrays.asList(Game.getAllCards()));
 		while (!tmp.isEmpty()) {
 			int num = HiddenInfo.random.nextInt(tmp.size());
@@ -94,13 +101,11 @@ public class HiddenInfo {
 	}
 
 	private Move firstPlayerMove(Turn turn) {
-		// TODO Auto-generated method stub
-		return null;
+		return firstPlayer.move(turn);
 	}
 
 	private Move secondPlayerMove(Turn turn) {
-		// TODO Auto-generated method stub
-		return null;
+		return secondPlayer.move(turn);
 	}
 
 }
