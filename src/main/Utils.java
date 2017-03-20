@@ -39,23 +39,27 @@ public class Utils {
 			Card attacker = turn.getCommonInfo().getAttacker();
 			Suit trumpSuit = turn.getCommonInfo().getTrumpSuit();
 			for (Card card : turn.getYourCards()) {
-				if (!card.getSuit().equals(attacker.getSuit()) && !card.getSuit().equals(trumpSuit))
-					continue;
-
-				if (card.getSuit().equals(trumpSuit) && !attacker.getSuit().equals(trumpSuit)) {
+				if (isDefenderBeatAttacker(attacker, card, trumpSuit))
 					result.add(Move.createUseCardMove(card));
-					continue;
-				}
-
-				if (card.getValue().ordinal() > attacker.getValue().ordinal()) {
-					result.add(Move.createUseCardMove(card));
-					continue;
-				}
 			}
 		}
 
 		result.add(finish);
 		return result;
+	}
+
+	public static boolean isDefenderBeatAttacker(Card attacker, Card defender, Suit trumpSuit) {
+		if (!defender.getSuit().equals(attacker.getSuit()) && !defender.getSuit().equals(trumpSuit))
+			return false;
+
+		if (defender.getSuit().equals(trumpSuit) && !attacker.getSuit().equals(trumpSuit))
+			return true;
+
+		if (defender.getValue().ordinal() > attacker.getValue().ordinal())
+			return true;
+
+		return false;
+
 	}
 
 }
