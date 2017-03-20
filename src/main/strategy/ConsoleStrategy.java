@@ -47,7 +47,7 @@ public class ConsoleStrategy implements Strategy {
 		out.println(commonInfo.getTurnType());
 
 		// Card fights
-		if (!commonInfo.getFights().isEmpty()) {
+		if (commonInfo.getFights() != null) {
 			for (CardFight cardFight : commonInfo.getFights())
 				out.print(cardFight.getDefender() + " ");
 			out.println();

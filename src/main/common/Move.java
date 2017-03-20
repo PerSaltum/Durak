@@ -40,7 +40,19 @@ public class Move {
 		if (this == obj) return true;
 		if (!(obj instanceof Move)) return false;
 		Move that = (Move) obj;
-		return this.card.equals(that.card) && this.moveType == that.moveType;
+		
+		if ((this.card == null) ^ (that.card == null))
+			return false;
+		
+		if (this.moveType != that.moveType)
+			return false;
+		
+		if (this.card != null) {
+			assert(that.card != null);
+			return this.card.equals(that.card);
+		}
+		
+		return true;
 	}
 	
 	@Override

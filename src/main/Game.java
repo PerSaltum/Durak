@@ -25,7 +25,7 @@ public class Game {
 		
 		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
 		CommonInfo commonInfo = state.initCommonInfo();
-		while (isGameOver(state, commonInfo))
+		while (!isGameOver(state, commonInfo))
 			commonInfo = makeMove(state, commonInfo);
 		printResult(state, commonInfo);
 	}
