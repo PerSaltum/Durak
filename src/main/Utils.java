@@ -22,14 +22,14 @@ public class Utils {
 				|| turn.getCommonInfo().getTurnType().equals(TurnType.AfterAttack)) {
 			if (turn.getCommonInfo().getFights() == null || turn.getCommonInfo().getFights().size() == 0) {
 				for (Card card : turn.getYourCards()) {
-					result.add(new Move(MoveType.SendCards, card));
+					result.add(new Move(MoveType.UseCard, card));
 				}
 			} else {
 				loop: for (Card card : turn.getYourCards()) {
 					for (CardFight cardFight : turn.getCommonInfo().getFights()) {
 						if (card.getValue().equals(cardFight.getAttacker().getValue())
 								|| card.getValue().equals(cardFight.getDefender().getValue())) {
-							result.add(new Move(MoveType.SendCards, card));
+							result.add(new Move(MoveType.UseCard, card));
 							continue loop;
 						}
 
@@ -44,12 +44,12 @@ public class Utils {
 					continue;
 
 				if (card.getSuit().equals(trumpSuit) && !attacker.getSuit().equals(trumpSuit)) {
-					result.add(new Move(MoveType.SendCards, card));
+					result.add(new Move(MoveType.UseCard, card));
 					continue;
 				}
 
 				if (card.getValue().ordinal() > attacker.getValue().ordinal()) {
-					result.add(new Move(MoveType.SendCards, card));
+					result.add(new Move(MoveType.UseCard, card));
 					continue;
 				}
 			}
