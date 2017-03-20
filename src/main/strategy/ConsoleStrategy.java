@@ -33,24 +33,26 @@ public class ConsoleStrategy implements Strategy {
 	}
 	
 	private void printTurn(Turn turn) {
-		out.println("========");
-		
 		if (isFirstMove) {
 			// Game begins. Show deck bottom card.
 			printDeckBottomCard(turn);
 			isFirstMove = false;
 		}
+		
+		out.println("========");
 
 		CommonInfo commonInfo = turn.getCommonInfo();
 		
 		// Turn type
-		out.println(commonInfo.getTurnType());
+		out.println(commonInfo.getTurnType() + ", Deck remainder: " + commonInfo.getRemainingDeckCardsNumber());
 
 		// Card fights
 		if (commonInfo.getFights() != null) {
+			out.print("Def: ");
 			for (CardFight cardFight : commonInfo.getFights())
 				out.print(cardFight.getDefender() + " ");
 			out.println();
+			out.print("Att: ");
 			for (CardFight cardFight : commonInfo.getFights())
 				out.print(cardFight.getAttacker() + " ");
 			out.println();
@@ -61,8 +63,8 @@ public class ConsoleStrategy implements Strategy {
 			out.println("Attacker: " + commonInfo.getAttacker());
 		
 		// Possible moves
-		out.print("Moves: ");
-
+		out.print("Moves: " + myHand + " " + deadCards + " ");
+		
 		Set<Move> possibleMoves = Utils.getPossibleMoves(turn);
 		Move[] possibleMovesSorted = sortPossibleMoves(possibleMoves);
 		for (Move move : possibleMovesSorted)
@@ -71,7 +73,11 @@ public class ConsoleStrategy implements Strategy {
 		out.println();
 	}
 	
-	private Move[] sortPossibleMoves(Set<Move> possibleMoves) {
+	private static final String myHand = "my";
+	private static final String deadCards = "dead";
+	
+	// TODO: move to Utils
+	private static Move[] sortPossibleMoves(Set<Move> possibleMoves) {
 		Move[] possibleMovesArray = new Move[possibleMoves.size()];
 		{
 			int i = 0;
@@ -89,21 +95,75 @@ public class ConsoleStrategy implements Strategy {
 	}
 
 	private void printDeckBottomCard(Turn turn) {
-		out.println(turn.getCommonInfo().getDeckBottomCard());
+		out.println("Deck bottom: " + turn.getCommonInfo().getDeckBottomCard());
 	}
 	
 	private Move readMove(Turn turn) {
-		String input = in.nextLine().trim();
-
-		Move move = parseInput(input);
-		if (move == null)
-			return null;
+		while (true) {
+			String input = in.nextLine().trim();
+			
+			if (input.equals(myHand)) {
+				printMyHand(turn);
+				continue;
+			}
+			
+			if (input.equals(deadCards)) {
+				printDeadCards(turn);
+				continue;
+			}
+			
+			Move move = parseInput(input);
+			if (move == null) {
+				out.print("Couldn't parse the move. Try again: ");
+				continue;
+			}
+			
+			Set<Move> possibleMoves = Utils.getPossibleMoves(turn);
+			if (!possibleMoves.contains(move)) {
+				out.print("You can't proceed with this move. Try again: ");
+				continue;
+			}
+			
+			return move;
+		}
 		
-		Set<Move> possibleMoves = Utils.getPossibleMoves(turn);
-		if (!possibleMoves.contains(move))
-			return null;
+		// unreachable
+	}
+	
+	private void printMyHand(Turn turn) {
+		Set<Card> hand = turn.getYourCards();
+		printCardSet(hand, "Hand");
+	}
+	
+	private void printDeadCards(Turn turn) {
+		Set<Card> dead = turn.getCommonInfo().getDeadCards();
+		printCardSet(dead, "Dead cards");
+	}
+	
+	private void printCardSet(Set<Card> cardSet, String name) {
+		Card[] cardSetSorted = sortCards(cardSet);
+		out.print(name + ": ");
+		for (Card card : cardSetSorted)
+			out.print(card + " ");
+		out.println();
+	}
+	
+	// TODO: move to Utils
+	private static Card[] sortCards(Set<Card> cards) {
+		Card[] cardsArray = new Card[cards.size()];
+		{
+			int i = 0;
+			for (Card card : cards)
+				cardsArray[i++] = card;
+			Arrays.sort(cardsArray, new Comparator<Card>() {
+				@Override
+				public int compare(Card o1, Card o2) {
+					return o1.hashCode() - o2.hashCode();
+				}
+			});
+		}
 		
-		return move;
+		return cardsArray;
 	}
 	
 	/**
