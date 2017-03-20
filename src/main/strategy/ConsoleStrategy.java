@@ -173,6 +173,9 @@ public class ConsoleStrategy implements Strategy {
 		if (input.equals("finish"))
 			return Move.createFinishMove();
 
+		input = input.replace('h', '♥').replace('c', '♣').replace('d', '♦').replace('s', '♠')
+		             .replace('H', '♥').replace('C', '♣').replace('D', '♦').replace('S', '♠');
+		
 		Card[] allCards = Game.getAllCards();
 		for (Card card : allCards)
 			if (card.toString().equals(input))
