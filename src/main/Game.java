@@ -82,7 +82,9 @@ public class Game {
 		case Defence:
 			return makeDefenceMove(state, commonInfo);
 		}
-		return null;
+		
+		// unreachable
+		throw new UnsupportedOperationException("Unsupported turn type");
 	}
 
 	private static CommonInfo makeAttackMove(HiddenInfo state, CommonInfo commonInfo) {
