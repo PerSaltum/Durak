@@ -1,4 +1,4 @@
-package main;
+package main.strategy;
 
 import main.common.Move;
 import main.common.Turn;

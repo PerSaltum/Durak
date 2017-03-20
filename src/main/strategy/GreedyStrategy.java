@@ -1,7 +1,8 @@
-package main;
+package main.strategy;
 
 import java.util.Set;
 
+import main.Utils;
 import main.common.Card;
 import main.common.Move;
 import main.common.MoveType;

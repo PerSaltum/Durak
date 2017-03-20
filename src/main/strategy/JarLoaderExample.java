@@ -1,4 +1,4 @@
-package main;
+package main.strategy;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
