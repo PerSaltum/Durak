@@ -2,7 +2,7 @@ package main.common;
 
 public class Move {
 	private final MoveType moveType;
-	private final Card card;
+	private final Card card; // maybe null
 
 	public Move(MoveType moveType, Card card) {
 		super();
@@ -20,7 +20,9 @@ public class Move {
 
 	@Override
 	public int hashCode() {
-		return card.hashCode() * 10 + moveType.ordinal();
+		if (card == null)
+			return 0;
+		return card.hashCode();
 	}
 
 	@Override
