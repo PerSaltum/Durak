@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import main.common.Card;
+import main.common.CardFight;
 import main.common.CommonInfo;
 import main.common.Move;
 import main.common.Turn;
@@ -24,11 +25,11 @@ public class HiddenInfo {
 
 	private final Strategy firstPlayer;
 	private final Strategy secondPlayer;
-	
+
 	public HiddenInfo(Strategy firstPlayer, Strategy secondPlayer) {
 		this.firstPlayer = firstPlayer;
 		this.secondPlayer = secondPlayer;
-		
+
 		List<Card> tmp = new LinkedList<>(Arrays.asList(Game.getAllCards()));
 		while (!tmp.isEmpty()) {
 			int num = HiddenInfo.random.nextInt(tmp.size());
@@ -65,7 +66,8 @@ public class HiddenInfo {
 	}
 
 	public CommonInfo initCommonInfo() {
-		return new CommonInfo(TurnType.Attack, null, null, null, deck.size(), deck.get(0));
+		return new CommonInfo(TurnType.Attack, new LinkedHashSet<>(), null, new LinkedList<CardFight>(), deck.size(),
+				deck.get(0));
 	}
 
 	public int getDeckSize() {

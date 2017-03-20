@@ -27,7 +27,8 @@ public class Utils {
 				loop: for (Card card : turn.getYourCards()) {
 					for (CardFight cardFight : turn.getCommonInfo().getFights()) {
 						if (card.getValue().equals(cardFight.getAttacker().getValue())
-								|| card.getValue().equals(cardFight.getDefender().getValue())) {
+								|| (cardFight.getDefender() != null
+										&& card.getValue().equals(cardFight.getDefender().getValue()))) {
 							result.add(Move.createUseCardMove(card));
 							continue loop;
 						}
@@ -43,8 +44,8 @@ public class Utils {
 					result.add(Move.createUseCardMove(card));
 			}
 		}
-
-		result.add(finish);
+		if (!turn.getCommonInfo().getTurnType().equals(TurnType.Attack) || !turn.getCommonInfo().getFights().isEmpty())
+			result.add(finish);
 		return result;
 	}
 

@@ -2,6 +2,7 @@ package main;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,18 +19,18 @@ import main.strategy.RandomStrategy;
 import main.strategy.Strategy;
 
 public class Game {
-	
+
 	public static void main(String[] args) {
 		Strategy firstPlayer = new RandomStrategy();
 		Strategy secondPlayer = new ConsoleStrategy();
-		
+
 		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
 		CommonInfo commonInfo = state.initCommonInfo();
 		while (!isGameOver(state, commonInfo))
 			commonInfo = makeMove(state, commonInfo);
 		printResult(state, commonInfo);
 	}
-	
+
 	private static final Card[] allCards;
 	static {
 		allCards = new Card[Value.values().length * Suit.values().length];
@@ -109,8 +110,8 @@ public class Game {
 		}
 		// prepare next move
 		state.switchRoles();
-		return new CommonInfo(TurnType.Attack, Collections.unmodifiableSet(newDead), null, null, state.getDeckSize(),
-				commonInfo.getDeckBottomCard());
+		return new CommonInfo(TurnType.Attack, Collections.unmodifiableSet(newDead), null, new LinkedList<CardFight>(),
+				state.getDeckSize(), commonInfo.getDeckBottomCard());
 	}
 
 	private static CommonInfo makeAfterAttackMove(HiddenInfo state, CommonInfo commonInfo) {
@@ -158,8 +159,8 @@ public class Game {
 			attackerCards.add(state.pullCardFromDeck());
 		}
 		// next attack
-		return new CommonInfo(TurnType.Attack, commonInfo.getDeadCards(), null, null, state.getDeckSize(),
-				commonInfo.getDeckBottomCard());
+		return new CommonInfo(TurnType.Attack, commonInfo.getDeadCards(), null, new LinkedList<CardFight>(),
+				state.getDeckSize(), commonInfo.getDeckBottomCard());
 	}
 
 	private static CommonInfo makeDefenceMove(HiddenInfo state, CommonInfo commonInfo) {
