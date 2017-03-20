@@ -2,13 +2,17 @@ package main;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import main.common.Card;
+import main.common.CardFight;
 import main.common.CommonInfo;
+import main.common.Move;
+import main.common.MoveType;
 import main.common.Suit;
 import main.common.Turn;
 import main.common.TurnType;
@@ -30,7 +34,7 @@ public class Game {
 		HiddenInfo state = new HiddenInfo();
 		CommonInfo commonInfo = init(state);
 		while (isGameOver(state, commonInfo))
-			makeMove(state, commonInfo);
+			commonInfo = makeMove(state, commonInfo);
 		printResult(state, commonInfo);
 	}
 
@@ -69,27 +73,83 @@ public class Game {
 		return true;
 	}
 
-	private static void makeMove(HiddenInfo state, CommonInfo commonInfo) {
+	private static CommonInfo makeMove(HiddenInfo state, CommonInfo commonInfo) {
 		switch (commonInfo.getTurnType()) {
 		case Attack:
-			makeAttackMove(state, commonInfo);
-			break;
+			return makeAttackMove(state, commonInfo);
 		case AfterAttack:
-			makeAfterAttackMove(state, commonInfo);
-			break;
+			return makeAfterAttackMove(state, commonInfo);
 		case Defence:
-			makeDefenceMove(state, commonInfo);
-			break;
-		default:
-			assert false;
-			break;
+			return makeDefenceMove(state, commonInfo);
+		}
+		return null;
+	}
+
+	private static CommonInfo makeAttackMove(HiddenInfo state, CommonInfo commonInfo) {
+		Move move = callAttackerMove(state, commonInfo);
+		if (move.getMoveType().equals(MoveType.Finish)) {
+			if (commonInfo.getFights() == null || commonInfo.getFights().isEmpty())
+				throw new IllegalStateException("Finish move when no fights");
+
+			// Fights to dead
+			Set<Card> newDead = new LinkedHashSet<>(commonInfo.getDeadCards());
+			for (CardFight cardFight : commonInfo.getFights()) {
+				newDead.add(cardFight.getAttacker());
+				newDead.add(cardFight.getDefender());
+			}
+
+			// give cards to player, defender last
+			Set<Card> firstToGive;
+			Set<Card> secondToGive;
+			if (state.isFirstPlayerAttack) {
+				firstToGive = state.firstHand;
+				secondToGive = state.secondHand;
+			} else {
+				firstToGive = state.secondHand;
+				secondToGive = state.firstHand;
+			}
+
+			while (!state.deck.isEmpty() && firstToGive.size() < 6) {
+				firstToGive.add(getNextCard(state.deck));
+			}
+
+			while (!state.deck.isEmpty() && secondToGive.size() < 6) {
+				secondToGive.add(getNextCard(state.deck));
+			}
+			// prepare next move
+			state.isFirstPlayerAttack = !state.isFirstPlayerAttack;
+			return new CommonInfo(TurnType.Attack, Collections.unmodifiableSet(newDead), null, null, state.deck.size(),
+					commonInfo.getDeckBottomCard());
+
+		} else {
+			Set<Card> attackerCards;
+			if (state.isFirstPlayerAttack)
+				attackerCards = state.firstHand;
+			else
+				attackerCards = state.secondHand;
+
+			if (!attackerCards.remove(move.getCard()))
+				throw new IllegalStateException("Attack card not in hand");
+
+			return new CommonInfo(TurnType.Defence, commonInfo.getDeadCards(), move.getCard(), commonInfo.getFights(),
+					commonInfo.getRemainingDeckCardsNumber(), commonInfo.getDeckBottomCard());
 		}
 	}
 
-	private static void makeAttackMove(HiddenInfo state, CommonInfo commonInfo) {
+	private static Move callAttackerMove(HiddenInfo state, CommonInfo commonInfo) {
+		boolean isFirstPlayerMove = state.isFirstPlayerAttack;
+		return callMove(state, commonInfo, isFirstPlayerMove);
+	}
+
+	private static Move callDefenderMove(HiddenInfo state, CommonInfo commonInfo) {
+		boolean isFirstPlayerMove = !state.isFirstPlayerAttack;
+		return callMove(state, commonInfo, isFirstPlayerMove);
+	}
+
+	private static Move callMove(HiddenInfo state, CommonInfo commonInfo, boolean isFirstPlayerMove) {
 		int opponentCardsNumber;
 		Set<Card> yourCards;
-		if (state.isFirstAttack) {
+		if (isFirstPlayerMove) {
 			yourCards = Collections.unmodifiableSet(state.firstHand);
 			opponentCardsNumber = state.secondHand.size();
 		} else {
@@ -97,18 +157,58 @@ public class Game {
 			opponentCardsNumber = state.firstHand.size();
 		}
 		Turn turn = new Turn(commonInfo, yourCards, opponentCardsNumber);
+		Move move;
+		if (isFirstPlayerMove) {
+			move = firstPlayerMove(turn);
+		} else {
+			move = secondPlayerMove(turn);
+		}
+		return move;
+	}
+
+	private static CommonInfo makeAfterAttackMove(HiddenInfo state, CommonInfo commonInfo) {
+		Move move = callAttackerMove(state, commonInfo);
+		if (move.getMoveType().equals(MoveType.Finish)) {
+			// Give all cards from fights to defender
+			// Give cards to attacker
+			// next attack
+		} else {
+			// Make new fight
+			// if max cards were given - do like "finish" move
+			// else - next afterAttack
+
+		}
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
-	private static void makeAfterAttackMove(HiddenInfo state, CommonInfo commonInfo) {
+	private static CommonInfo makeDefenceMove(HiddenInfo state, CommonInfo commonInfo) {
+		Move move = callDefenderMove(state, commonInfo);
+		if (move.getMoveType().equals(MoveType.Finish)) {
+			// Move attacker to fights
+			// if max cards were given - do like "finish" in afterAttack move
+			// else - call AfterAttack
+		} else {
+			// check if move correct
+			// make new fight
+			// if max cards were given - do like "finish" in attack
+			// else - call Attack
+
+		}
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
-	private static void makeDefenceMove(HiddenInfo state, CommonInfo commonInfo) {
+	private static Move firstPlayerMove(Turn turn) {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	private static Move secondPlayerMove(Turn turn) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private static void printResult(HiddenInfo state, CommonInfo commonInfo) {

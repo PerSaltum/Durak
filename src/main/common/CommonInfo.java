@@ -1,15 +1,18 @@
 package main.common;
 
+import java.util.List;
+import java.util.Set;
+
 public class CommonInfo {
 
 	private final TurnType turnType;
-	private final Card[] deadCards;
+	private final Set<Card> deadCards;
 	private final Card attacker; // Not null when turnType == Defence
-	private final CardFight[] fights;
+	private final List<CardFight> fights;
 	private final int remainingDeckCardsNumber;
 	private final Card deckBottomCard;
 
-	public CommonInfo(TurnType turnType, Card[] deadCards, Card attacker, CardFight[] fights,
+	public CommonInfo(TurnType turnType, Set<Card> deadCards, Card attacker, List<CardFight> fights,
 			int remainingDeckCardsNumber, Card deckBottomCard) {
 		super();
 		this.turnType = turnType;
@@ -24,7 +27,7 @@ public class CommonInfo {
 		return turnType;
 	}
 
-	public Card[] getDeadCards() {
+	public Set<Card> getDeadCards() {
 		return deadCards;
 	}
 
@@ -32,7 +35,7 @@ public class CommonInfo {
 		return attacker;
 	}
 
-	public CardFight[] getFights() {
+	public List<CardFight> getFights() {
 		return fights;
 	}
 

@@ -20,7 +20,7 @@ public class Utils {
 
 		if (turn.getCommonInfo().getTurnType().equals(TurnType.Attack)
 				|| turn.getCommonInfo().getTurnType().equals(TurnType.AfterAttack)) {
-			if (turn.getCommonInfo().getFights() == null || turn.getCommonInfo().getFights().length == 0) {
+			if (turn.getCommonInfo().getFights() == null || turn.getCommonInfo().getFights().size() == 0) {
 				for (Card card : turn.getYourCards()) {
 					result.add(new Move(MoveType.SendCards, card));
 				}
@@ -56,7 +56,7 @@ public class Utils {
 		}
 
 		result.add(finish);
-		return null;
+		return result;
 	}
 
 }
