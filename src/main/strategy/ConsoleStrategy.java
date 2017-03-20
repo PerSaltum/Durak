@@ -78,7 +78,7 @@ public class ConsoleStrategy implements Strategy {
 
 			Set<Move> possibleMoves = Utils.getPossibleMoves(turn);
 			if (!possibleMoves.contains(move)) {
-				out.print("You can't proceed with this move. Try again: ");
+				out.print("You can't proceed with such move. Try again: ");
 				continue;
 			}
 
