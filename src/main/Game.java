@@ -14,21 +14,40 @@ import main.common.MoveType;
 import main.common.Suit;
 import main.common.TurnType;
 import main.common.Value;
-import main.strategy.ConsoleStrategy;
-import main.strategy.RandomStrategy;
+import main.strategy.GreedyStrategy;
 import main.strategy.Strategy;
 
 public class Game {
 
-	public static void main(String[] args) {
-		Strategy firstPlayer = new RandomStrategy();
-		Strategy secondPlayer = new ConsoleStrategy();
+	public static boolean useUnmodifiable = true;
 
-		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
-		CommonInfo commonInfo = state.initCommonInfo();
-		while (!isGameOver(state, commonInfo))
-			commonInfo = makeMove(state, commonInfo);
-		printResult(state, commonInfo);
+	public static void main(String[] args) {
+		long timeStart = System.currentTimeMillis();
+		Strategy firstPlayer = new GreedyStrategy(1);
+		Strategy secondPlayer = new GreedyStrategy(0);
+
+		double totalScore = 0;
+		int win = 0;
+		int draw = 0;
+		int loose = 0;
+		for (int i = 0; i < 1000000; i++) {
+			HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
+			CommonInfo commonInfo = state.initCommonInfo();
+			while (!isGameOver(state, commonInfo))
+				commonInfo = makeMove(state, commonInfo);
+			double result = getResult(state, commonInfo, false);
+			totalScore += result;
+			if (result > 0.5)
+				win++;
+			else if (result > -0.5)
+				draw++;
+			else
+				loose++;
+		}
+		long timeStop = System.currentTimeMillis();
+		System.out.println("Score: " + totalScore);
+		System.out.println("Win/draw/loose: " + win + "/" + draw + "/" + loose);
+		System.out.println("Time, ms: " + (timeStop - timeStart));
 	}
 
 	private static final Card[] allCards;
@@ -110,8 +129,13 @@ public class Game {
 		}
 		// prepare next move
 		state.switchRoles();
-		return new CommonInfo(TurnType.Attack, Collections.unmodifiableSet(newDead), null, new LinkedList<CardFight>(),
-				state.getDeckSize(), commonInfo.getDeckBottomCard());
+		Set<Card> deadSet;
+		if (useUnmodifiable)
+			deadSet = Collections.unmodifiableSet(newDead);
+		else
+			deadSet = newDead;
+		return new CommonInfo(TurnType.Attack, deadSet, null, new LinkedList<CardFight>(), state.getDeckSize(),
+				commonInfo.getDeckBottomCard());
 	}
 
 	private static CommonInfo makeAfterAttackMove(HiddenInfo state, CommonInfo commonInfo) {
@@ -208,8 +232,8 @@ public class Game {
 
 	}
 
-	private static void printResult(HiddenInfo state, CommonInfo commonInfo) {
-		// TODO
+	private static double getResult(HiddenInfo state, CommonInfo commonInfo, boolean verbose) {
+		return state.getResults(commonInfo, verbose);
 	}
 
 }

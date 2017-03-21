@@ -23,7 +23,7 @@ public class ConsoleStrategy implements Strategy {
 	private static final PrintStream err = System.err;
 
 	private static final int consoleFlushIntervals = 10; // Sleep time (ms)
-	
+
 	@Override
 	public Move move(Turn turn) {
 		printTurn(turn);
@@ -122,7 +122,7 @@ public class ConsoleStrategy implements Strategy {
 		}
 		println();
 	}
-	
+
 	private void printMove(Move move) {
 		switch (move.getMoveType()) {
 		case Finish:
@@ -134,11 +134,11 @@ public class ConsoleStrategy implements Strategy {
 		}
 		out.flush();
 	}
-	
+
 	private void printCard(Card card) {
 		if (card == null)
 			return;
-		
+
 		switch (card.getSuit()) {
 		case Clubs:
 		case Spades:
@@ -150,25 +150,25 @@ public class ConsoleStrategy implements Strategy {
 			break;
 		}
 	}
-	
+
 	private static void printRed(Object obj) {
 		err.print(obj.toString());
 		err.flush();
 		sleep();
 	}
-	
+
 	private static void print(Object obj) {
 		out.print(obj.toString());
 		out.flush();
 		sleep();
 	}
-	
+
 	private static void println(Object obj) {
 		out.println(obj.toString());
 		out.flush();
 		sleep();
 	}
-	
+
 	private static void println() {
 		out.println();
 		out.flush();
@@ -182,7 +182,7 @@ public class ConsoleStrategy implements Strategy {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @return null when can't parse
 	 */
@@ -200,5 +200,10 @@ public class ConsoleStrategy implements Strategy {
 				return Move.createUseCardMove(card);
 
 		return null;
+	}
+
+	@Override
+	public String getName() {
+		return "Console";
 	}
 }

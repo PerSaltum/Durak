@@ -5,4 +5,6 @@ import main.common.Turn;
 
 public interface Strategy {
 	public Move move(Turn turn);
+
+	public String getName();
 }

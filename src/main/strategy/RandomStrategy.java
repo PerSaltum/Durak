@@ -13,15 +13,15 @@ import main.common.Turn;
 public class RandomStrategy implements Strategy {
 
 	private final Random random = new Random(0);
-	
+
 	@Override
 	public Move move(Turn turn) {
 		Set<Move> possibleMoves = Utils.getPossibleMoves(turn);
-		assert(!possibleMoves.isEmpty()) : "No possible moves?";
-		
+		assert (!possibleMoves.isEmpty()) : "No possible moves?";
+
 		// Random element index
 		int k = random.nextInt(possibleMoves.size());
-		
+
 		// Iterate to the k-th element
 		for (Move move : possibleMoves)
 			if (k-- == 0)
@@ -29,6 +29,11 @@ public class RandomStrategy implements Strategy {
 
 		// unreachable
 		throw new IllegalStateException();
+	}
+
+	@Override
+	public String getName() {
+		return "Random";
 	}
 
 }

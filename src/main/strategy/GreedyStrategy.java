@@ -8,8 +8,20 @@ import main.common.Move;
 import main.common.MoveType;
 import main.common.Suit;
 import main.common.Turn;
+import main.common.TurnType;
 
 public class GreedyStrategy implements Strategy {
+
+	private final int version;
+
+	/**
+	 * 
+	 * @param version
+	 *            - [0..1]
+	 */
+	public GreedyStrategy(int version) {
+		this.version = version;
+	}
 
 	@Override
 	public Move move(Turn turn) {
@@ -35,13 +47,21 @@ public class GreedyStrategy implements Strategy {
 	 * @return true, if "move" better then "best"
 	 */
 	private boolean isBetterThen(Move best, Move move, Turn turn) {
+		Suit trumpSuit = turn.getCommonInfo().getTrumpSuit();
+		if (version > 0) {
+			if (turn.getCommonInfo().getTurnType().equals(TurnType.AfterAttack)) {
+				if (move.getMoveType().equals(MoveType.UseCard) && move.getCard().getSuit().equals(trumpSuit))
+					return false;
+				if (best.getMoveType().equals(MoveType.UseCard) && best.getCard().getSuit().equals(trumpSuit))
+					return true;
+			}
+		}
 		if (move.getMoveType().equals(MoveType.Finish))
 			return false;
 
 		if (best.getMoveType().equals(MoveType.Finish))
 			return true;
 
-		Suit trumpSuit = turn.getCommonInfo().getTrumpSuit();
 		Card bestCard = best.getCard();
 		Card moveCard = move.getCard();
 
@@ -56,6 +76,11 @@ public class GreedyStrategy implements Strategy {
 			return true;
 
 		return false;
+	}
+
+	@Override
+	public String getName() {
+		return "Greedy";
 	}
 
 }

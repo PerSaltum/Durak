@@ -86,10 +86,16 @@ public class HiddenInfo {
 		int opponentCardsNumber;
 		Set<Card> yourCards;
 		if (isFirstPlayerMove) {
-			yourCards = Collections.unmodifiableSet(firstHand);
+			if (Game.useUnmodifiable)
+				yourCards = Collections.unmodifiableSet(firstHand);
+			else
+				yourCards = firstHand;
 			opponentCardsNumber = secondHand.size();
 		} else {
-			yourCards = Collections.unmodifiableSet(secondHand);
+			if (Game.useUnmodifiable)
+				yourCards = Collections.unmodifiableSet(secondHand);
+			else
+				yourCards = secondHand;
 			opponentCardsNumber = firstHand.size();
 		}
 		Turn turn = new Turn(commonInfo, yourCards, opponentCardsNumber);
@@ -108,6 +114,33 @@ public class HiddenInfo {
 
 	private Move secondPlayerMove(Turn turn) {
 		return secondPlayer.move(turn);
+	}
+
+	public double getResults(CommonInfo commonInfo, boolean vebose) {
+		if (!firstHand.isEmpty() && !secondHand.isEmpty())
+			throw new IllegalStateException("Game isn't over");
+
+		if (firstHand.isEmpty() && secondHand.isEmpty()) {
+			if (vebose)
+				System.out.println("Game draw");
+			return 0;
+		}
+		if (firstHand.isEmpty()) {
+			double result = 1.0 + ((double) secondHand.size()) / 100.0;
+			if (vebose) {
+				System.out.println("Player " + firstPlayer.getName() + " win");
+				System.out.println("Score: " + result);
+			}
+			return result;
+		} else {
+			double result = -(1.0 + ((double) firstHand.size()) / 100.0);
+			if (vebose) {
+				System.out.println("Player " + secondPlayer.getName() + " win");
+				System.out.println("Score: " + result);
+			}
+			return result;
+
+		}
 	}
 
 }
