@@ -40,9 +40,8 @@ public class ConsoleStrategy implements Strategy {
 		// Turn type
 		print(commonInfo.getTurnType() + ", Deck: " + commonInfo.getRemainingDeckCardsNumber() + ", Trump: ");
 		printCard(turn.getCommonInfo().getDeckBottomCard());
-		println(", Enemy: " + turn.getOpponentCardsNumber());
+		println(", Opponent: " + turn.getOpponentCardsNumber());
 
-		printMyHand(turn);
 		// Card fights
 		if (!commonInfo.getFights().isEmpty()) {
 			print("Def: ");
@@ -65,6 +64,9 @@ public class ConsoleStrategy implements Strategy {
 			printCard(commonInfo.getAttacker());
 			println();
 		}
+		
+		// My hand
+		printMyHand(turn);
 
 		// Possible moves
 		print("Moves: ");
