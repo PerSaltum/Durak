@@ -21,18 +21,20 @@ public class HiddenInfo {
 	private final Set<Card> firstHand = new LinkedHashSet<>();
 	private final Set<Card> secondHand = new LinkedHashSet<>();
 	private boolean isFirstPlayerAttack = true;
-	static final Random random = new Random();
+	private final Random random;
 
 	private final Strategy firstPlayer;
 	private final Strategy secondPlayer;
 
-	public HiddenInfo(Strategy firstPlayer, Strategy secondPlayer) {
+	public HiddenInfo(Strategy firstPlayer, Strategy secondPlayer, long randomSeed) {
+		this.random = new Random(randomSeed);
+		
 		this.firstPlayer = firstPlayer;
 		this.secondPlayer = secondPlayer;
 
 		List<Card> tmp = new LinkedList<>(Arrays.asList(Game.getAllCards()));
 		while (!tmp.isEmpty()) {
-			int num = HiddenInfo.random.nextInt(tmp.size());
+			int num = random.nextInt(tmp.size());
 			deck.add(tmp.remove(num));
 		}
 

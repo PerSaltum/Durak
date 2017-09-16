@@ -32,7 +32,7 @@ public class Game {
 		int draw = 0;
 		int loose = 0;
 		for (int i = 0; i < 1000000; i++) {
-			GameResult gameResult = playGame(firstPlayer, secondPlayer);
+			GameResult gameResult = playGame(firstPlayer, secondPlayer, 123);
 			double result = gameResult.getFirstPlayerScore();
 			totalScore += result;
 			if (gameResult.getWinner() == 1) {
@@ -50,8 +50,8 @@ public class Game {
 		System.out.println("Time, ms: " + (timeStop - timeStart));
 	}
 	
-	public static GameResult playGame(Strategy firstPlayer, Strategy secondPlayer) {
-		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
+	public static GameResult playGame(Strategy firstPlayer, Strategy secondPlayer, long randomSeed) {
+		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer, randomSeed);
 		CommonInfo commonInfo = state.initCommonInfo();
 		while (!isGameOver(state, commonInfo))
 			commonInfo = makeMove(state, commonInfo);
