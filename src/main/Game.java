@@ -32,7 +32,7 @@ public class Game {
 		int draw = 0;
 		int loose = 0;
 		for (int i = 0; i < 1000000; i++) {
-			GameResult gameResult = playGame(firstPlayer, secondPlayer, 123);
+			GameResult gameResult = playGame(firstPlayer, secondPlayer, i);
 			double result = gameResult.getFirstPlayerScore();
 			totalScore += result;
 			if (gameResult.getWinner() == 1) {
