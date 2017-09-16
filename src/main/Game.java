@@ -32,23 +32,67 @@ public class Game {
 		int draw = 0;
 		int loose = 0;
 		for (int i = 0; i < 1000000; i++) {
-			HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
-			CommonInfo commonInfo = state.initCommonInfo();
-			while (!isGameOver(state, commonInfo))
-				commonInfo = makeMove(state, commonInfo);
-			double result = getResult(state, commonInfo, false);
+			GameResult gameResult = playGame(firstPlayer, secondPlayer);
+			double result = gameResult.getFirstPlayerScore();
 			totalScore += result;
-			if (result > 0.5)
+			if (gameResult.getWinner() == 1) {
 				win++;
-			else if (result > -0.5)
+			} else if (gameResult.getWinner() == 0) {
 				draw++;
-			else
+			} else {
+				assert gameResult.getWinner() == -1;
 				loose++;
+			}
 		}
 		long timeStop = System.currentTimeMillis();
 		System.out.println("Score: " + totalScore);
 		System.out.println("Win/draw/loose: " + win + "/" + draw + "/" + loose);
 		System.out.println("Time, ms: " + (timeStop - timeStart));
+	}
+	
+	public static GameResult playGame(Strategy firstPlayer, Strategy secondPlayer) {
+		HiddenInfo state = new HiddenInfo(firstPlayer, secondPlayer);
+		CommonInfo commonInfo = state.initCommonInfo();
+		while (!isGameOver(state, commonInfo))
+			commonInfo = makeMove(state, commonInfo);
+		
+		final double result = getResult(state, commonInfo, false);
+		
+		return new GameResult() {
+			@Override
+			public int getWinner() {
+				if (result > 0.5)
+					return 1;
+				if (result > -0.5)
+					return 0;
+				return -1;
+			}
+	
+			@Override
+			public double getFirstPlayerScore() {
+				return result;
+			}
+	
+			/**
+			 * Return -1 for better score
+			 */
+			@Override
+			public int compareTo(GameResult arg0) {
+				if (this.getFirstPlayerScore() > arg0.getFirstPlayerScore())
+					return -1;
+				return 1;
+			}
+		};
+	}
+
+	public interface GameResult extends Comparable<GameResult> {
+		/**
+		 * first player: 1
+		 * draw: 0
+		 * second player: -1
+		 */
+		int getWinner();
+		double getFirstPlayerScore();
 	}
 
 	private static final Card[] allCards;
