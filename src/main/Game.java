@@ -14,6 +14,7 @@ import main.common.MoveType;
 import main.common.Suit;
 import main.common.TurnType;
 import main.common.Value;
+import main.strategy.ConsoleStrategy;
 import main.strategy.GreedyStrategy;
 import main.strategy.Strategy;
 
@@ -24,7 +25,7 @@ public class Game {
 	public static void main(String[] args) {
 		long timeStart = System.currentTimeMillis();
 		Strategy firstPlayer = new GreedyStrategy(1);
-		Strategy secondPlayer = new GreedyStrategy(0);
+		Strategy secondPlayer = new ConsoleStrategy();
 
 		double totalScore = 0;
 		int win = 0;
@@ -197,9 +198,14 @@ public class Game {
 			// if max cards were given - do like "finish" in afterAttack move
 			int fightsNumber = fights.size();
 			assert fightsNumber <= 6;
+			int notDefendedFights = 0;
+			for (CardFight cardFight : fights) {
+				if (cardFight.getDefender() == null)
+					notDefendedFights++;
+			}
 			int defenderCardsNumber = state.getDefenderCards().size();
-			assert fightsNumber <= defenderCardsNumber;
-			if (fightsNumber >= 6 || fightsNumber >= defenderCardsNumber) {
+			assert notDefendedFights <= defenderCardsNumber;
+			if (fightsNumber >= 6 || notDefendedFights >= defenderCardsNumber) {
 				return pickUpCards(state, commonInfo);
 			}
 			// else - call AfterAttack
